@@ -30,10 +30,14 @@ public class TwitterFeedServiceImp implements TwitterFeedService {
         TwitterFeed twitterFeed = new TwitterFeed();
 
         List<User> users = userService.getUsers();
-        List<Tweet> tweets = tweetsService.getTweets();
 
-        List<User> withUpdatedMessages = userMapper.mapTweetsToUsers(users, tweets);
-        twitterFeed.setUsers(withUpdatedMessages);
+        if(users != null && users.size() > 0) {
+            List<Tweet> tweets = tweetsService.getTweets();
+            if(tweets != null && tweets.size() > 0) {
+                List<User> withUpdatedMessages = userMapper.mapTweetsToUsers(users, tweets);
+                twitterFeed.setUsers(withUpdatedMessages);
+            }
+        }
 
         return twitterFeed;
     }

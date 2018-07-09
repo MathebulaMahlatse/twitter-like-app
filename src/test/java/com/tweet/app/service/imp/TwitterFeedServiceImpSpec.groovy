@@ -43,4 +43,40 @@ class TwitterFeedServiceImpSpec extends Specification {
         twitterFeed.getUsers() == expectedUsersWithTweets
 
     }
+
+    def 'mapTweetsToUsers: should not map users if list is empty'() {
+        when: 'calling getTweetFeed'
+        TwitterFeed twitterFeed = twitterFeedServiceImp.getTweetFeed()
+
+        then: 'getUsers should be called'
+        1 * userService.getUsers() >> []
+
+        and: 'getTweets should be called'
+        0 * tweetsService.getTweets()
+
+        and: 'mapTweetsToUsers to be called'
+        0 * userMapper.mapTweetsToUsers(_, _)
+
+        and: 'tweet feed should be'
+        twitterFeed
+
+    }
+
+    def 'mapTweetsToUsers: should not map tweets if the list is empty'() {
+        when: 'calling getTweetFeed'
+        TwitterFeed twitterFeed = twitterFeedServiceImp.getTweetFeed()
+
+        then: 'getUsers should be called'
+        1 * userService.getUsers() >> expectedUsers
+
+        and: 'getTweets should be called'
+        1 * tweetsService.getTweets() >> null
+
+        and: 'mapTweetsToUsers to be called'
+        0 * userMapper.mapTweetsToUsers(_, _)
+
+        and: 'tweet feed should be'
+        twitterFeed
+
+    }
 }

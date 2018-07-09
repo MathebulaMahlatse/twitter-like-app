@@ -59,11 +59,13 @@ public class UserMapper {
         Set<String> uniqueUsers = new HashSet<>();
         whoFollowsWho.forEach(user -> {
             String[] messageParts = user.split(ApplicationConstants.USER_FOLLOWS_KEY);
+            //Assumption: , is used to indicate multiple following
+            if(messageParts.length > 1) {
+                String[] multipleUsers = messageParts[1].split(ApplicationConstants.FOLLOWING_MULTIPLE_SEPARATOR_INDEX);
 
-            String[] multipleUsers = messageParts[1].split(ApplicationConstants.FOLLOWING_MULTIPLE_SEPARATOR_INDEX);
-
-            uniqueUsers.add(messageParts[0].trim());
-            uniqueUsers.addAll(trimUsers(multipleUsers));
+                uniqueUsers.add(messageParts[0].trim());
+                uniqueUsers.addAll(trimUsers(multipleUsers));
+            }
         });
 
         return new ArrayList<>(uniqueUsers);

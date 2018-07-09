@@ -98,6 +98,17 @@ class UserMapperSpec extends Specification {
         actualUniqueUsers.get(2) == 'Thabo'
     }
 
+    def 'mapToUniqueUsers: should handle error properly'() {
+        given: 'whoFollowsWho'
+        List<String> whoFollowsWho = ['Alan follows', 'Alan']
+
+        when: 'calling mapToUniqueUsers'
+        List<String> actualUniqueUsers = mapper.mapToUniqueUsers(whoFollowsWho)
+
+        then: 'actualUniqueUsers should be'
+        !actualUniqueUsers
+    }
+
     def 'mapTweetsToUsers: should map tweets to users'() {
         given: 'users and tweets'
         List<User> users = [new User(name: 'Alan', following: [new Following(name: 'Thabo')])]
